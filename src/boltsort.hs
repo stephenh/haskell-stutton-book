@@ -29,11 +29,11 @@ boltsort ((n:ns), bs) = (ssn ++ [n] ++ sln, ssb ++ [b] ++ slb) where
 -- second take with cute partition method
 boltsort2 :: ([Nut], [Bolt]) -> ([Nut], [Bolt])
 boltsort2 ([], []) = ([], [])
-boltsort2 ((n:ns), bs) = (ssn ++ [n] ++ sln, ssb ++ [b] ++ slb) where
+boltsort2 ((n:ns), bs) = (sn' ++ [n] ++ ln', sb' ++ [b] ++ lb') where
   (sb, [b], lb) = partition (\b -> negate (compareNutBolt n b)) bs
   (sn, _, ln) = partition (\n -> compareNutBolt n b) ns
-  (ssn, ssb) = boltsort2 (sn, sb)
-  (sln, slb) = boltsort2 (ln, lb)
+  (sn', sb') = boltsort2 (sn, sb)
+  (ln', lb') = boltsort2 (ln, lb)
 
 nuts = [Nut 1, Nut 3, Nut 2, Nut 4]
 bolts = [Bolt 4, Bolt 2, Bolt 3, Bolt 1]
