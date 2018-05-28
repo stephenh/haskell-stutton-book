@@ -1,0 +1,6 @@
+
+
+* Functors are just containers that can map.
+* Types and variable names are separate
+
+
