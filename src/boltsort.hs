@@ -6,7 +6,7 @@ newtype Bolt = Bolt Int deriving Show
 compareNutBolt :: Nut -> Bolt -> Int
 compareNutBolt (Nut i) (Bolt j) = i - j
 
--- given a compare functions, breaks [a] into smaller/equal/bigger
+-- given a compare function, breaks [a] into a tuple of ([smaller], [equal], [bigger])
 partition :: (a -> Int) -> [a] -> ([a], [a], [a])
 partition f [] = ([], [], [])
 partition f (a:as) | c < 0     = (a:ls, es, gs)
@@ -14,7 +14,13 @@ partition f (a:as) | c < 0     = (a:ls, es, gs)
                    | otherwise = (ls, es, a:gs)
   where c = f a; (ls, es, gs) = partition f as
 
--- first take/more verbose sorting of nuts/bolts using only compareNutBolt
+-- first take/more verbose sorting of nuts/bolts using only compareNutBolt.
+-- this is basically a two-pass quicksort, which:
+-- 1) picks a nut as a pivot
+-- 2) partitions the bolts using the nut-pivot
+-- 3) using the nut pivot to find the matching bolt pivot
+-- 4) partitions the nuts using the bolt-pivot
+-- 5) recurses/combines
 boltsort :: ([Nut], [Bolt]) -> ([Nut], [Bolt])
 boltsort ([], []) = ([], [])
 boltsort ((n:ns), bs) = (ssn ++ [n] ++ sln, ssb ++ [b] ++ slb) where
