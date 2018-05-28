@@ -2,17 +2,19 @@
 newtype Nut = Nut Int deriving Show
 newtype Bolt = Bolt Int deriving Show
 
+-- tries to fit a nut & bolt, returns <0 if nut is smaller, >0 if nut is bigger, 0 if it fits
 compareNutBolt :: Nut -> Bolt -> Int
 compareNutBolt (Nut i) (Bolt j) = i - j
 
 -- given a compare functions, breaks [a] into smaller/equal/bigger
 partition :: (a -> Int) -> [a] -> ([a], [a], [a])
 partition f [] = ([], [], [])
-partition f (a:as) = (includeIf (0>) ++ ls, includeIf (0==) ++ es, includeIf (0<) ++ gs)
-  where v = f a
-        (ls, es, gs) = partition f as
-        includeIf op = if (op v) then [a] else []
+partition f (a:as) | c < 0     = (a:ls, es, gs)
+                   | c == 0    = (ls, a:es, gs)
+                   | otherwise = (ls, es, a:gs)
+  where c = f a; (ls, es, gs) = partition f as
 
+-- first take/more verbose sorting of nuts/bolts using only compareNutBolt
 boltsort :: ([Nut], [Bolt]) -> ([Nut], [Bolt])
 boltsort ([], []) = ([], [])
 boltsort ((n:ns), bs) = (ssn ++ [n] ++ sln, ssb ++ [b] ++ slb) where
@@ -24,6 +26,7 @@ boltsort ((n:ns), bs) = (ssn ++ [n] ++ sln, ssb ++ [b] ++ slb) where
   (ssn, ssb) = boltsort (sn, sb)
   (sln, slb) = boltsort (ln, lb)
 
+-- second take with cute partition method
 boltsort2 :: ([Nut], [Bolt]) -> ([Nut], [Bolt])
 boltsort2 ([], []) = ([], [])
 boltsort2 ((n:ns), bs) = (ssn ++ [n] ++ sln, ssb ++ [b] ++ slb) where
