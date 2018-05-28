@@ -2,6 +2,14 @@
 newtype Nut = Nut Int deriving Show
 newtype Bolt = Bolt Int deriving Show
 
+-- The problem is to sort two buckets of nuts and bolts, given
+-- only a comparison function of nut-to-bolt, e.g. you can't
+-- compare nuts against themselves or bolts against themselves.
+-- Also, as a simplification, there is only a single nut=bolt
+-- match for a given size, e.g. all nuts are uniquely sized and
+-- all bolts are uniquely sized, but all nuts/bolts have a single
+-- match.
+
 -- tries to fit a nut & bolt, returns <0 if nut is smaller, >0 if nut is bigger, 0 if it fits
 compareNutBolt :: Nut -> Bolt -> Int
 compareNutBolt (Nut i) (Bolt j) = i - j
